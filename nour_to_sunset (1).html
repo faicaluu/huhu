@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nour To Sunset — Animation & Event Planner | Agadir</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    /* ── LOGO PALETTE ── */
+    --sky-light:  #C8E6F5;   /* pale sky — page backgrounds */
+    --sky-mid:    #7BBCDF;   /* mid blue — section tints    */
+    --sky-deep:   #3A7FAF;   /* deeper sky — nav, accents   */
+    --sky-dark:   #1D5278;   /* darkest sky — text on light  */
+    --gold:       #C9893A;   /* sun gold                    */
+    --gold-light: #E8AC5A;   /* highlight gold              */
+    --gold-pale:  #F7DCB0;   /* pale sun — card bg tints    */
+    --navy:       #1A2E4A;   /* dark script navy from logo  */
+    --white:      #FFFFFF;
+    --cloud:      #F0F8FF;   /* near-white cloud background */
+    --text-dark:  #1A2E4A;
+    --text-mid:   #3A5670;
+    --shadow-sky: 0 8px 40px rgba(59,127,175,0.18);
+    --shadow-gold:0 8px 32px rgba(201,137,58,0.28);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    color: var(--text-dark);
+    background: var(--cloud);
+    overflow-x: hidden;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 52px;
+    background: rgba(26,82,120,0.92);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(232,172,90,0.35);
+    transition: padding 0.3s, background 0.3s;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+  .nav-logo-circle {
+    width: 52px; height: 52px; border-radius: 50%;
+    border: 2px solid var(--gold-light);
+    background: linear-gradient(160deg, #C8E6F5 30%, #7BBCDF 70%, #3A7FAF 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; overflow: hidden;
+    box-shadow: 0 2px 12px rgba(201,137,58,0.35);
+  }
+  .nav-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; font-weight: 600;
+    color: var(--white); letter-spacing: 0.04em; line-height: 1.2;
+  }
+  .nav-brand span {
+    color: var(--gold-light); display: block;
+    font-size: 0.65rem; font-weight: 300;
+    letter-spacing: 0.22em; font-style: italic;
+  }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    color: rgba(255,255,255,0.82); text-decoration: none;
+    font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--gold-light); }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative; height: 100vh; min-height: 680px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; text-align: center;
+  }
+  /* Sky-blue gradient hero — matches logo background */
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(180deg,
+        rgba(26,82,120,0.72) 0%,
+        rgba(59,127,175,0.30) 45%,
+        rgba(26,46,74,0.70) 100%),
+      url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1800&q=85') center/cover no-repeat;
+  }
+  /* Subtle golden shimmer at the horizon */
+  .hero-glow {
+    position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 70% 35% at 50% 82%, rgba(201,137,58,0.22) 0%, transparent 68%);
+    animation: glow 7s ease-in-out infinite alternate;
+  }
+  @keyframes glow { from { opacity: 0.5; } to { opacity: 1; } }
+
+  .hero-content {
+    position: relative; z-index: 2;
+    max-width: 780px; padding: 0 24px;
+  }
+  .hero-eyebrow {
+    font-size: 0.7rem; letter-spacing: 0.38em; text-transform: uppercase;
+    color: var(--gold-light); margin-bottom: 22px;
+    display: flex; align-items: center; justify-content: center; gap: 14px;
+  }
+  .hero-eyebrow::before, .hero-eyebrow::after {
+    content: ''; display: block; width: 44px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold));
+  }
+  .hero-eyebrow::after { background: linear-gradient(90deg, var(--gold), transparent); }
+
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3rem, 8vw, 5.6rem);
+    font-weight: 300; color: var(--white);
+    line-height: 1.06; letter-spacing: 0.02em;
+    margin-bottom: 22px;
+  }
+  .hero h1 em { font-style: italic; color: var(--gold-light); }
+  .hero-sub {
+    font-size: 0.95rem; color: rgba(255,255,255,0.82);
+    letter-spacing: 0.07em; font-weight: 300;
+    margin-bottom: 42px; line-height: 1.8;
+  }
+  .hero-cta { display: inline-flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+
+  .btn-primary {
+    padding: 14px 38px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    color: var(--navy); border: none; cursor: pointer;
+    font-family: 'Jost', sans-serif; font-size: 0.78rem;
+    letter-spacing: 0.22em; text-transform: uppercase; font-weight: 500;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: var(--shadow-gold);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(201,137,58,0.5); }
+
+  .btn-outline {
+    padding: 13px 38px;
+    border: 1px solid rgba(255,255,255,0.55); color: var(--white);
+    background: transparent; cursor: pointer;
+    font-family: 'Jost', sans-serif; font-size: 0.78rem;
+    letter-spacing: 0.22em; text-transform: uppercase; font-weight: 400;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .btn-outline:hover { background: rgba(200,230,245,0.15); border-color: var(--sky-light); }
+
+  /* ─── SECTION BASE ─── */
+  section { padding: 96px 24px; }
+  .section-inner { max-width: 1100px; margin: 0 auto; }
+
+  .section-label {
+    font-size: 0.67rem; letter-spacing: 0.38em; text-transform: uppercase;
+    color: var(--sky-deep); margin-bottom: 12px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-label::after {
+    content: ''; display: block; width: 34px; height: 1px;
+    background: linear-gradient(90deg, var(--gold), var(--sky-mid));
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4.5vw, 3.2rem);
+    font-weight: 300; line-height: 1.15; color: var(--navy);
+  }
+  .section-title em { font-style: italic; color: var(--gold); }
+
+  /* ─── ABOUT ─── */
+  #about {
+    background: var(--white);
+    border-top: 3px solid var(--sky-light);
+  }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 72px;
+    align-items: center; margin-top: 56px;
+  }
+  .about-img-wrap { position: relative; }
+  .about-img-wrap img {
+    width: 100%; aspect-ratio: 4/5; object-fit: cover;
+    display: block;
+    border: 3px solid var(--sky-light);
+  }
+  .about-img-badge {
+    position: absolute; bottom: -20px; right: -20px;
+    background: linear-gradient(135deg, var(--sky-deep), var(--sky-dark));
+    border: 2px solid var(--gold-light);
+    color: var(--white); padding: 20px 26px; text-align: center;
+  }
+  .about-img-badge .num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.6rem; font-weight: 600; display: block; line-height: 1;
+    color: var(--gold-light);
+  }
+  .about-img-badge .lbl {
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
+  }
+  .about-text { padding-left: 8px; }
+  .about-text p {
+    color: var(--text-mid); font-size: 0.96rem; line-height: 1.88;
+    font-weight: 300; margin-bottom: 18px;
+  }
+  .about-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+  .tag {
+    padding: 6px 18px;
+    border: 1px solid var(--sky-mid);
+    background: var(--sky-light);
+    color: var(--sky-dark); font-size: 0.7rem;
+    letter-spacing: 0.15em; text-transform: uppercase;
+  }
+
+  /* ─── SERVICES ─── */
+  #services {
+    background: linear-gradient(180deg, var(--sky-light) 0%, var(--cloud) 100%);
+  }
+  .services-intro {
+    max-width: 560px; margin-top: 16px; margin-bottom: 56px;
+    color: var(--text-mid); font-size: 0.97rem; line-height: 1.82; font-weight: 300;
+  }
+  .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .service-card {
+    background: var(--white);
+    border: 1px solid rgba(123,188,223,0.35);
+    border-top: 3px solid var(--sky-mid);
+    padding: 36px 30px;
+    transition: transform 0.25s, box-shadow 0.25s, border-top-color 0.25s;
+  }
+  .service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-sky);
+    border-top-color: var(--gold);
+  }
+  .service-icon { font-size: 2.1rem; margin-bottom: 16px; }
+  .service-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem; font-weight: 600; color: var(--sky-dark);
+    margin-bottom: 10px;
+  }
+  .service-card p { color: var(--text-mid); font-size: 0.87rem; line-height: 1.82; font-weight: 300; }
+
+  /* ─── GALLERY ─── */
+  #gallery {
+    background: linear-gradient(180deg, var(--sky-dark) 0%, var(--navy) 100%);
+    padding-top: 96px; padding-bottom: 0;
+  }
+  #gallery .section-label { color: var(--sky-light); }
+  #gallery .section-label::after { background: linear-gradient(90deg, var(--gold-light), var(--sky-mid)); }
+  #gallery .section-title { color: var(--white); }
+  #gallery .section-title em { color: var(--gold-light); }
+  .gallery-sub {
+    color: rgba(200,230,245,0.7); font-size: 0.9rem; font-weight: 300;
+    margin-top: 12px; margin-bottom: 48px; letter-spacing: 0.04em;
+  }
+  .gallery-masonry { columns: 3; column-gap: 8px; }
+  .gallery-item {
+    break-inside: avoid; margin-bottom: 8px;
+    overflow: hidden; display: block; position: relative; cursor: pointer;
+    border: 2px solid rgba(123,188,223,0.25);
+  }
+  .gallery-item img {
+    width: 100%; display: block;
+    transition: transform 0.5s ease;
+  }
+  .gallery-item:hover img { transform: scale(1.05); }
+  .gallery-item-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(26,46,74,0.7) 0%, transparent 55%);
+    opacity: 0; transition: opacity 0.3s;
+    display: flex; align-items: flex-end; padding: 16px;
+  }
+  .gallery-item:hover .gallery-item-overlay { opacity: 1; }
+  .gallery-item-overlay span {
+    color: var(--gold-light); font-size: 0.72rem;
+    letter-spacing: 0.16em; text-transform: uppercase;
+  }
+
+  /* ─── LOCATION ─── */
+  #location { background: var(--white); }
+  .location-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+    align-items: start; margin-top: 52px;
+  }
+  .location-info p {
+    color: var(--text-mid); font-size: 0.95rem; line-height: 1.88;
+    font-weight: 300; margin-bottom: 30px;
+  }
+  .location-details { display: flex; flex-direction: column; gap: 22px; }
+  .loc-item { display: flex; align-items: flex-start; gap: 14px; }
+  .loc-icon {
+    width: 42px; height: 42px; border-radius: 50%; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--sky-light), var(--sky-mid));
+    border: 1px solid var(--sky-mid);
+    display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+  }
+  .loc-text strong {
+    display: block; font-size: 0.72rem; letter-spacing: 0.15em;
+    text-transform: uppercase; color: var(--sky-dark); margin-bottom: 3px;
+  }
+  .loc-text span { color: var(--text-mid); font-size: 0.9rem; font-weight: 300; }
+
+  /* Sky-themed map placeholder */
+  .map-placeholder {
+    background: linear-gradient(160deg, var(--sky-light) 0%, var(--sky-mid) 60%, var(--sky-deep) 100%);
+    border: 2px solid var(--sky-mid);
+    aspect-ratio: 4/3;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  /* floating cloud shapes */
+  .map-placeholder::before {
+    content: '';
+    position: absolute; top: 14%; left: 5%;
+    width: 140px; height: 48px; border-radius: 50px;
+    background: rgba(255,255,255,0.55);
+    box-shadow: 60px -12px 0 rgba(255,255,255,0.45), 100px 8px 0 rgba(255,255,255,0.35);
+  }
+  .map-placeholder::after {
+    content: '';
+    position: absolute; top: 22%; right: 8%;
+    width: 100px; height: 36px; border-radius: 50px;
+    background: rgba(255,255,255,0.4);
+  }
+  .map-sun {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    box-shadow: 0 0 32px rgba(201,137,58,0.5);
+    margin-bottom: 14px; position: relative; z-index: 2;
+  }
+  .map-placeholder p {
+    color: var(--navy); font-size: 0.9rem; letter-spacing: 0.08em;
+    text-align: center; position: relative; z-index: 2;
+    font-weight: 500;
+  }
+  .map-placeholder a {
+    margin-top: 16px; color: var(--sky-dark); font-size: 0.75rem;
+    letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none;
+    border-bottom: 1px solid var(--sky-dark); padding-bottom: 2px;
+    position: relative; z-index: 2;
+    transition: color 0.2s;
+  }
+  .map-placeholder a:hover { color: var(--navy); }
+
+  /* ─── BOOKING ─── */
+  #booking {
+    background: linear-gradient(160deg, var(--sky-deep) 0%, var(--sky-dark) 50%, var(--navy) 100%);
+    position: relative; overflow: hidden;
+  }
+  /* cloud texture overlay */
+  #booking::before {
+    content: '';
+    position: absolute; top: -30%; right: -15%;
+    width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,230,245,0.12) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  #booking .section-label { color: var(--sky-light); }
+  #booking .section-label::after { background: linear-gradient(90deg, var(--gold-light), var(--sky-light)); }
+  #booking .section-title { color: var(--white); }
+  #booking .section-title em { color: var(--gold-light); }
+  .booking-sub {
+    color: rgba(200,230,245,0.75); font-size: 0.9rem; font-weight: 300;
+    margin-top: 10px; margin-bottom: 48px; max-width: 460px;
+    line-height: 1.75;
+  }
+  .booking-form {
+    background: rgba(200,230,245,0.07);
+    border: 1px solid rgba(123,188,223,0.3);
+    padding: 52px 48px;
+    max-width: 760px; position: relative;
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .form-group { margin-bottom: 24px; }
+  .form-group label {
+    display: block; font-size: 0.68rem; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--sky-light); margin-bottom: 8px;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%; padding: 13px 18px;
+    background: rgba(200,230,245,0.08);
+    border: 1px solid rgba(123,188,223,0.4);
+    color: var(--white);
+    font-family: 'Jost', sans-serif; font-size: 0.9rem; font-weight: 300;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+    -webkit-appearance: none;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--gold-light);
+    background: rgba(201,137,58,0.07);
+  }
+  .form-group input::placeholder,
+  .form-group textarea::placeholder { color: rgba(200,230,245,0.38); }
+  .form-group select option { background: var(--sky-dark); color: var(--white); }
+  .form-group textarea { resize: vertical; min-height: 120px; }
+  .form-submit {
+    width: 100%; padding: 16px 32px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    border: none; cursor: pointer;
+    font-family: 'Jost', sans-serif; font-size: 0.8rem;
+    letter-spacing: 0.26em; text-transform: uppercase; font-weight: 500;
+    color: var(--navy);
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: var(--shadow-gold);
+  }
+  .form-submit:hover { transform: translateY(-2px); box-shadow: 0 10px 36px rgba(201,137,58,0.5); }
+
+  /* ─── WHATSAPP ─── */
+  .whatsapp-float {
+    position: fixed; bottom: 28px; right: 28px; z-index: 200;
+    display: flex; align-items: center; gap: 12px;
+    background: #25D366; color: var(--white);
+    padding: 14px 22px 14px 18px;
+    box-shadow: 0 6px 28px rgba(37,211,102,0.45);
+    text-decoration: none;
+    font-size: 0.78rem; font-weight: 500; letter-spacing: 0.08em;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .whatsapp-float:hover { transform: translateY(-3px); box-shadow: 0 10px 36px rgba(37,211,102,0.55); }
+  .whatsapp-float svg { width: 22px; height: 22px; flex-shrink: 0; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--navy);
+    padding: 60px 24px 32px;
+    border-top: 3px solid var(--sky-mid);
+    text-align: center;
+  }
+  .footer-emblem {
+    width: 76px; height: 76px; border-radius: 50%;
+    background: linear-gradient(160deg, var(--sky-light) 20%, var(--sky-mid) 65%, var(--sky-deep) 100%);
+    border: 2px solid var(--gold-light);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 18px; font-size: 1.8rem;
+    box-shadow: 0 4px 20px rgba(201,137,58,0.3);
+  }
+  .footer-brand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.55rem; font-weight: 300; color: var(--white);
+    letter-spacing: 0.1em; margin-bottom: 6px;
+  }
+  .footer-sub {
+    font-size: 0.7rem; letter-spacing: 0.3em;
+    color: var(--sky-light); text-transform: uppercase; margin-bottom: 32px;
+  }
+  .footer-social {
+    display: flex; justify-content: center; gap: 16px; margin-bottom: 36px;
+  }
+  .footer-social a {
+    width: 42px; height: 42px;
+    border: 1px solid rgba(123,188,223,0.45);
+    background: rgba(123,188,223,0.08);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--sky-light); text-decoration: none; font-size: 1rem;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+    border-radius: 50%;
+  }
+  .footer-social a:hover {
+    background: rgba(123,188,223,0.22);
+    border-color: var(--sky-mid); color: var(--white);
+  }
+  .footer-divider { border: none; border-top: 1px solid rgba(255,255,255,0.08); margin-bottom: 22px; }
+  .footer-copy { color: rgba(200,230,245,0.38); font-size: 0.76rem; }
+
+  /* ─── LIGHTBOX ─── */
+  .lightbox {
+    display: none; position: fixed; inset: 0; z-index: 500;
+    background: rgba(26,46,74,0.96);
+    align-items: center; justify-content: center;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 92vw; max-height: 90vh; object-fit: contain; }
+  .lightbox-close {
+    position: absolute; top: 24px; right: 28px;
+    background: none; border: none; color: var(--sky-light);
+    font-size: 2.2rem; cursor: pointer; opacity: 0.75;
+    transition: opacity 0.2s;
+  }
+  .lightbox-close:hover { opacity: 1; }
+
+  /* ─── SCROLL REVEAL ─── */
+  .reveal {
+    opacity: 0; transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    nav { padding: 12px 22px; }
+    .nav-links { display: none; }
+    .about-grid, .location-grid { grid-template-columns: 1fr; gap: 40px; }
+    .about-img-badge { right: 10px; }
+    .services-grid { grid-template-columns: 1fr 1fr; }
+    .gallery-masonry { columns: 2; }
+    .booking-form { padding: 32px 24px; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    section { padding: 68px 18px; }
+    .services-grid { grid-template-columns: 1fr; }
+    .gallery-masonry { columns: 1; }
+    .whatsapp-float span { display: none; }
+    .whatsapp-float { padding: 14px; border-radius: 50%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#home" class="nav-logo">
+    <div class="nav-logo-circle">🌅</div>
+    <div class="nav-brand">
+      Nour To Sunset
+      <span>Animation & Event Planner</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#location">Location</a></li>
+    <li><a href="#booking">Book Now</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Agadir · Tamraght · Aourir</div>
+    <h1>Where <em>Moments</em><br>Meet the Horizon</h1>
+    <p class="hero-sub">
+      Luxury events crafted under the golden light of Agadir's sunsets.<br>
+      Weddings · Proposals · Birthdays · Private Dinners
+    </p>
+    <div class="hero-cta">
+      <a href="#booking" class="btn-primary">Reserve Your Date</a>
+      <a href="#gallery" class="btn-outline">View Our Work</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <div class="section-label">Our Story</div>
+    <h2 class="section-title">Turning the <em>Ordinary</em><br>into the Unforgettable</h2>
+    <div class="about-grid reveal">
+      <div class="about-img-wrap">
+        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&q=80"
+             alt="Agadir beach at sunset" />
+        <div class="about-img-badge">
+          <span class="num">5+</span>
+          <span class="lbl">Years of Magic</span>
+        </div>
+      </div>
+      <div class="about-text">
+        <p>Born from a love of Agadir's breathtaking coastline, <strong>Nour To Sunset</strong> is a boutique animation and event planning studio rooted in Tamraght and Aourir — two of Morocco's most beautiful coastal villages.</p>
+        <p>We design intimate, bespoke experiences directly on the beach — where the Atlantic breeze, golden sand, and dramatic sunsets become the backdrop for the most important moments of your life.</p>
+        <p>Every setup we create is entirely handcrafted: from floral arches and candlelit picnics to decorated boats in the marina, each event is a unique work of art tailored entirely to you.</p>
+        <div class="about-tags">
+          <span class="tag">Beach Events</span>
+          <span class="tag">Weddings</span>
+          <span class="tag">Proposals</span>
+          <span class="tag">Birthdays</span>
+          <span class="tag">Night Picnics</span>
+          <span class="tag">Luxury Setups</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-inner">
+    <div class="section-label">What We Do</div>
+    <h2 class="section-title">Crafted <em>Experiences</em><br>for Every Occasion</h2>
+    <p class="services-intro">From intimate proposals to grand celebrations, every experience is tailored to you — delivered with passion on the shores of Agadir.</p>
+    <div class="services-grid reveal">
+      <div class="service-card">
+        <div class="service-icon">💍</div>
+        <h3>Proposals & Engagements</h3>
+        <p>We design the perfect moment to say "yes" — on the beach, at sunset, surrounded by flowers, candles and everything you've dreamed of.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🌸</div>
+        <h3>Weddings</h3>
+        <p>From intimate beach ceremonies to elegant receptions, we handle every detail so you can be fully present in your most precious day.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🎂</div>
+        <h3>Birthday Celebrations</h3>
+        <p>Vibrant, personalised birthday setups on the beach — balloons, florals, cakes and surprise moments your loved ones will never forget.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🕯️</div>
+        <h3>Romantic Dinners</h3>
+        <p>Private candlelit dinners with the sound of waves as your soundtrack — a table for two, blooms and golden lantern light.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">⛵</div>
+        <h3>Boat & Marina Events</h3>
+        <p>Celebrate on the water — decorated boats in Agadir's marina, styled with flowers, balloons and lights for an unforgettable surprise.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🌙</div>
+        <h3>Night Picnics & Spots</h3>
+        <p>Magical under-the-stars picnic setups — floor seating, lanterns, cushions and florals in our signature night-time atmosphere.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="section-inner">
+    <div class="section-label">Our Work</div>
+    <h2 class="section-title">Stories Told in <em>Light</em></h2>
+    <p class="gallery-sub">Real events, real emotions — captured on the beaches of Agadir, Tamraght & Aourir</p>
+    <div class="gallery-masonry">
+      <div class="gallery-item reveal">
+        <img src="https://images.unsplash.com/photo-1519741347686-c1e0aadf4611?w=800&q=80" alt="Beach dinner at sunset" loading="lazy">
+        <div class="gallery-item-overlay"><span>Beach Dinner</span></div>
+      </div>
+      <div class="gallery-item reveal">
+        <img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=800&q=80" alt="Romantic floral arch" loading="lazy">
+        <div class="gallery-item-overlay"><span>Wedding Arch</span></div>
+      </div>
+      <div class="gallery-item reveal">
+        <img src="https://images.unsplash.com/photo-1539541417736-3d44c90da315?w=800&q=80" alt="Candlelight proposal" loading="lazy">
+        <div class="gallery-item-overlay"><span>Proposal</span></div>
+      </div>
+      <div class="gallery-item reveal">
+        <img src="https://images.unsplash.com/photo-1478146896981-b80fe463b330?w=800&q=80" alt="Floral celebration" loading="lazy">
+        <div class="gallery-item-overlay"><span>Birthday</span></div>
+      </div>
+      <div class="gallery-item reveal">
+        <img src="https://images.unsplash.com/photo-1544148103-0773bf10d330?w=800&q=80" alt="Elegant beach table" loading="lazy">
+        <div class="gallery-item-overlay"><span>Private Dinner</span></div>
+      </div>
+      <div class="gallery-item reveal">
+        <img src="https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?w=800&q=80" alt="Sunset beach setup" loading="lazy">
+        <div class="gallery-item-overlay"><span>Engagement</span></div>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:52px; padding-bottom:72px;">
+      <a href="https://www.instagram.com/nour_to_sunset/" target="_blank" class="btn-primary">See More on Instagram</a>
+    </div>
+  </div>
+</section>
+
+<!-- LOCATION -->
+<section id="location">
+  <div class="section-inner">
+    <div class="section-label">Where to Find Us</div>
+    <h2 class="section-title">Rooted in <em>Agadir</em></h2>
+    <div class="location-grid reveal">
+      <div class="location-info">
+        <p>We operate along the stunning coastline of southern Morocco — from the beaches of Agadir to the surf villages of Tamraght and Aourir, where wild Atlantic waves meet golden sand and spectacular sunsets.</p>
+        <div class="location-details">
+          <div class="loc-item">
+            <div class="loc-icon">📍</div>
+            <div class="loc-text">
+              <strong>Primary Locations</strong>
+              <span>Agadir Beach · Tamraght · Aourir, Morocco</span>
+            </div>
+          </div>
+          <div class="loc-item">
+            <div class="loc-icon">📱</div>
+            <div class="loc-text">
+              <strong>WhatsApp / Phone</strong>
+              <span>+212 706 852 829</span>
+            </div>
+          </div>
+          <div class="loc-item">
+            <div class="loc-icon">📸</div>
+            <div class="loc-text">
+              <strong>Follow Our Story</strong>
+              <span>@nour_to_sunset on Instagram & TikTok</span>
+            </div>
+          </div>
+          <div class="loc-item">
+            <div class="loc-icon">🌅</div>
+            <div class="loc-text">
+              <strong>Available</strong>
+              <span>7 days a week · Morning, Sunset & Night events</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="map-placeholder">
+        <div class="map-sun"></div>
+        <p>Tamraght & Aourir<br>Agadir, Morocco</p>
+        <a href="https://maps.google.com/?q=Tamraght,Agadir,Morocco" target="_blank">Open in Google Maps →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING FORM -->
+<section id="booking">
+  <div class="section-inner">
+    <div class="section-label">Reservations</div>
+    <h2 class="section-title">Begin Your <em>Story</em></h2>
+    <p class="booking-sub">Tell us about your dream event and we'll reach out within 24 hours to bring it to life.</p>
+    <div class="booking-form reveal">
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" placeholder="Your first name">
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" placeholder="Your last name">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" placeholder="your@email.com">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Event Type</label>
+          <select>
+            <option value="" disabled selected>Select an event</option>
+            <option>Wedding</option>
+            <option>Proposal / Engagement</option>
+            <option>Birthday Celebration</option>
+            <option>Romantic Dinner</option>
+            <option>Boat / Marina Event</option>
+            <option>Night Picnic</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Preferred Date</label>
+          <input type="date">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Tell Us About Your Dream Event</label>
+        <textarea placeholder="Describe the atmosphere, colors, number of guests, any special ideas or personal touches you'd love to include..."></textarea>
+      </div>
+      <button class="form-submit" onclick="handleSubmit()">Send My Request ✦</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-emblem">🌅</div>
+  <div class="footer-brand">Nour To Sunset</div>
+  <div class="footer-sub">Animation & Event Planner · Agadir, Morocco</div>
+  <div class="footer-social">
+    <a href="https://www.instagram.com/nour_to_sunset/" target="_blank" title="Instagram">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="2" y="2" width="20" height="20" rx="5"/>
+        <circle cx="12" cy="12" r="4"/>
+        <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+      </svg>
+    </a>
+    <a href="https://www.tiktok.com/@nour_to_sunset" target="_blank" title="TikTok">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/>
+      </svg>
+    </a>
+    <a href="https://wa.me/212706852829" target="_blank" title="WhatsApp">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
+      </svg>
+    </a>
+  </div>
+  <hr class="footer-divider">
+  <p class="footer-copy">© 2025 Nour To Sunset · Animation & Event Planner · Agadir, Morocco · All rights reserved</p>
+</footer>
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/212706852829" class="whatsapp-float" target="_blank">
+  <svg viewBox="0 0 24 24" fill="currentColor">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
+  </svg>
+  <span>Chat on WhatsApp</span>
+</a>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()">×</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Gallery lightbox
+  document.querySelectorAll('.gallery-item img').forEach(img => {
+    img.addEventListener('click', () => {
+      document.getElementById('lightbox-img').src = img.src;
+      document.getElementById('lightbox').classList.add('open');
+    });
+  });
+  function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
+  document.getElementById('lightbox').addEventListener('click', function(e) {
+    if (e.target === this) closeLightbox();
+  });
+
+  // Form submit
+  function handleSubmit() {
+    const btn = document.querySelector('.form-submit');
+    btn.textContent = '✓ Request Sent — We\'ll be in touch soon!';
+    btn.style.background = 'linear-gradient(135deg, #2d7d46, #4caf50)';
+    btn.style.color = '#fff';
+    btn.disabled = true;
+  }
+
+  // Nav scroll shrink
+  window.addEventListener('scroll', () => {
+    const nav = document.querySelector('nav');
+    nav.style.padding = window.scrollY > 60 ? '10px 52px' : '14px 52px';
+  });
+</script>
+</body>
+</html>
